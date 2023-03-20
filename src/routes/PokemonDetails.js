@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
+import { useParams, useLoaderData } from 'react-router-dom';
+
+// define in the component file where the data is used, but export to pass in through router setup
+export async function loader({ params }) {
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${params.name}`);
+  const pokemonData = await response.json();  
+  return pokemonData;
+}
 
 function PokemonDetails() {
   const params = useParams();
-  const [pokemon, setPokemon] = useState(null);
-
-  useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${params.name}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setPokemon(data);
-      });
-  }, [params.name]);
+  const pokemon = useLoaderData();
 
   if (!pokemon) {
     return <>loading...</>;
