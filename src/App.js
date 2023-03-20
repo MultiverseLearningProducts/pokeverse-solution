@@ -1,37 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Navigation } from './components/Navigation';
-import { Favorites, Home, PokemonDetails } from './routes';
+import React from 'react';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  // createRoutesFromElements,
+  // Route,
+} from 'react-router-dom';
+import { Favorites, Home, PokemonDetails, Layout } from './routes';
 import { FavoritesProvider } from './FavoritesProvider';
 
+import { loader } from './routes/Home';
+import { loader as detailsLoader } from './routes/PokemonDetails';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+        loader,
+      },
+      {
+        path: '/:name',
+        element: <PokemonDetails />,
+        loader: detailsLoader,
+      },
+      {
+        path: '/favorites',
+        element: <Favorites />,
+      },
+    ],
+  },
+]);
+
+// // alternate syntax using JSX
+// const router = createBrowserRouter(
+//   createRoutesFromElements(
+//     <Route element={<Layout />}>
+//       <Route path='/' element={<Home />} loader={loader}  />
+//       <Route path='/:name' element={<PokemonDetails />} loader={detailsLoader} />
+//     </Route>
+//   )
+// );
+
 function App() {
-  const [pokemonList, setPokemonList] = useState([]);
-
-  useEffect(() => {
-    fetch('https://pokeapi.co/api/v2/pokemon/?limit=150')
-      .then((res) => res.json())
-      .then((data) => {
-        setPokemonList(data.results);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
   return (
-    <BrowserRouter>
-      <FavoritesProvider>
-        <div data-testid='app'>
-          <Navigation />
-
-          <Routes>
-            <Route path='/' element={<Home pokemonList={pokemonList} />} />
-            <Route path='/:name' element={<PokemonDetails />} />
-            <Route path='/favorites' element={<Favorites />} />
-          </Routes>
-        </div>
-      </FavoritesProvider>
-    </BrowserRouter>
+    <FavoritesProvider>
+      <RouterProvider router={router}/>
+    </FavoritesProvider>
   );
 }
 

@@ -5,12 +5,23 @@ import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import { PokemonCard } from '../components';
+import { useLoaderData } from 'react-router-dom';
 
-function Home({ pokemonList }) {
+// define in the component file where the data is used, but export to pass in through router setup
+export async function loader() {
+  const response = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=150');
+  const pokemonData = await response.json();  
+  return pokemonData.results;
+}
+
+function Home() {
+  const pokemonList = useLoaderData();
   const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [search, setSearch] = useState('');
-
+  
   useEffect(() => {
+    // avoid erroring if data hasn't come back from fetch yet
+    if (!pokemonList) return;
     setFilteredPokemon(
       pokemonList.filter((pokemon) =>
         pokemon.name.toLowerCase().includes(search.toLowerCase())
