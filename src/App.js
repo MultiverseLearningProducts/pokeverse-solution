@@ -9,8 +9,11 @@ import { PokemonCard } from './components/PokemonCard';
 
 function App() {
   const [pokemonList, setPokemonList] = useState([]);
-  const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [search, setSearch] = useState('');
+
+  function includesSearch(pokemon) {
+    return pokemon.name.toLowerCase().includes(search.toLowerCase());
+  }
 
   useEffect(() => {
     fetch('https://pokeapi.co/api/v2/pokemon/?limit=150')
@@ -22,14 +25,6 @@ function App() {
         console.error(error);
       });
   }, []);
-
-  useEffect(() => {
-    setFilteredPokemon(
-      pokemonList.filter((pokemon) =>
-        pokemon.name.toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  }, [search, pokemonList]);
 
   return (
     <div data-testid="app">
@@ -51,7 +46,7 @@ function App() {
         </Row>
 
         <Row className='g-4'>
-          {filteredPokemon.map((pokemon) => (
+          {pokemonList.filter(includesSearch).map((pokemon) => (
             <Col key={pokemon.name}>
               <PokemonCard url={pokemon.url} name={pokemon.name} />
             </Col>
