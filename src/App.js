@@ -53,11 +53,13 @@ function App() {
             </Col>
           </Row>
           <Row className='g-4'>
+            <h1>Favorites</h1>
             <Col>
               <Favorites/>
             </Col>
           </Row>
           <Row className='g-4'>
+          <h1>Available</h1>
             {filteredPokemon.map((pokemon) => (
               <Col key={pokemon.name}>
                 <PokemonCard url={pokemon.url} name={pokemon.name} />
