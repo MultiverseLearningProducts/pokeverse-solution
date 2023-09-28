@@ -23,9 +23,8 @@ describe('App', () => {
     await act(async () => {
       render(<App />);
     });
-
-    const appContainer = screen.getByTestId('app');
-
-    expect(appContainer).toBeInTheDocument();
+    expect(screen.getByText("Pokeverse")).toBeTruthy();
   });
+
+
 });
