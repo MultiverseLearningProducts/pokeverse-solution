@@ -6,7 +6,6 @@ import { FavoritesContext } from '../FavoritesProvider';
 function FavoriteCard({ poke }) {
   const [pokemon, setPokemon] = useState(poke);
   const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
-  console.log(favorites)
   return (
     <Card style={{ width: '18rem' }} className='mx-auto'>
       <Card.Img
