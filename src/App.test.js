@@ -44,6 +44,7 @@ describe('App', () => {
   });
 
   it('pokemon cards are rendered', async () => {
+    
     await act(async () => {
       render(<App />);
     });

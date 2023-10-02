@@ -3,21 +3,10 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { FavoritesContext } from '../FavoritesProvider';
 
-function PokemonCard({ url, name }) {
-  const [pokemon, setPokemon] = useState(null);
+function FavoriteCard({ poke }) {
+  const [pokemon, setPokemon] = useState(poke);
   const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
-
-  useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setPokemon(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [url]);
-
+  console.log(favorites)
   return (
     <Card style={{ width: '18rem' }} className='mx-auto'>
       <Card.Img
@@ -28,18 +17,18 @@ function PokemonCard({ url, name }) {
         src={pokemon?.sprites.front_default}
       />
       <Card.Body>
-        <Card.Title>{name}</Card.Title>
+        <Card.Title>{poke.name}</Card.Title>
         <Card.Text as='div'>
           Abilities:
           <ul>
-            {pokemon?.abilities.map((ability) => (
+            {poke?.abilities.map((ability) => (
               <li key={ability.ability.name}>
                 <span key={ability.ability.name}>{ability.ability.name}</span>
               </li>
             ))}
           </ul>
         </Card.Text>
-        {favorites.some(e => e.name === name) ? (
+        {favorites.some(e => e.name === poke.name) ? (
           <Button variant='danger' onClick={() => removeFavorite(pokemon)}>
             Remove from Favorites
           </Button>
@@ -53,4 +42,4 @@ function PokemonCard({ url, name }) {
   );
 }
 
-export { PokemonCard };
+export { FavoriteCard };
